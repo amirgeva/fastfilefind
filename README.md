@@ -11,8 +11,8 @@ This utility allows a fast search for files based on the meta-information:
 * Date
   
 The original purpose was to allow to easily answer a queries such as:
-  `Where is the .cpp file I edited last week?`
-  `Where is the IMG* file that is larger than 1Mb?`
+* `Where is the .cpp file I edited last week?`
+* `Where is the IMG* file that is larger than 1Mb?`
   
 The utility works by building a database of files, using the fffbuild.py script
 This script can either be run manually, or better yet, run as
