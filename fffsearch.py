@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #-------------------------------------------------------------------------------
 # Name:        fffsearch
 # Purpose:
@@ -102,7 +103,6 @@ class SearchDialog(QDialog):
 
     def itemClick(self,index):
         pass
-        #print "Click: {}".format(index)
         
     def itemDoubleClick(self,index):
         row=index.row()
@@ -116,9 +116,8 @@ class SearchDialog(QDialog):
         if not self.loadedLastSize:
             self.loadedLastSize=True
             try:
-                w=s.value('winWidth',defaultValue=640)
-                h=s.value('winHeight',defaultValue=480)
-                #print "Settings size: {}x{}".format(w,h)
+                w=int(s.value('winWidth',defaultValue=640))
+                h=int(s.value('winHeight',defaultValue=480))
                 self.resize(QSize(w,h))
                 self.resizeEvent(None)
             except IOError:
@@ -126,7 +125,6 @@ class SearchDialog(QDialog):
         else:
             w=self.size().width()
             h=self.size().height()
-            #print "Saving size: {}x{}".format(w,h)
             s.setValue('winWidth',w)
             s.setValue('winHeight',h)
             s.sync()

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #-------------------------------------------------------------------------------
 # Name:        fffbuild
 # Purpose:
@@ -12,10 +13,10 @@ import sqlite3 as sq
 import os
 import sys
 import time
-import win32api
-import win32file
 
-def getDrives():
+def getWindowsDrives():
+    import win32api
+    import win32file
     drives = win32api.GetLogicalDriveStrings()
     drives = drives.split('\000')[:-1]
     phys=[]
@@ -23,6 +24,17 @@ def getDrives():
         if win32file.GetDriveType(d) == win32file.DRIVE_FIXED:
             phys.append(d)
     return phys
+    
+def getLinuxDrive():
+    return ['/']
+
+def getDrives():
+    if sys.platform == 'win32':
+        return getWindowsDrives()
+    if sys.platform.startswith('linux'):
+        return getLinuxDrive()
+    print "Unknown platform '{}'".format(sys.platform)
+    return []
 
 def createTables(cur):
     try:
@@ -80,7 +92,7 @@ def scan(excludes,dirs,files,base):
             try:
                 filesize=os.path.getsize(fullpath);
                 filetime=os.path.getmtime(fullpath)
-            except WindowsError,e:
+            except Exception,e:
                 pass
             files.append([f,idx,ext,filesize,filetime])
 
