@@ -4,6 +4,12 @@ fastfilefind
 Disk indexing and search utility
 --------------------------------
 
+Requirements:  
+* python 2.7
+* PySide
+* On Windows:  python module  win32api
+               
+
 This utility allows a fast search for files based on the meta-information:
 * Name
 * Extension
