@@ -232,10 +232,11 @@ class SearchDialog(QDialog):
             mindir,maxdir=rows[0]
         ql=["SELECT name, dir, ext, size, time, path FROM t_files INNER JOIN t_dirs ON t_files.dir==t_dirs.id WHERE ("]
         ext=self.extensionName.text()
-        term=self.searchTerm.text()
+        terms=self.searchTerm.text().split(' ')
         ql.append('(dir>{}) AND (dir<{})'.format(mindir,maxdir))
-        if len(term)>0:
-            self.appendCondition(ql,"name LIKE '%{}%'".format(term))
+        for term in terms:
+            if len(term)>0:
+                self.appendCondition(ql,"name LIKE '%{}%'".format(term))
         if len(ext)>0:
             self.appendCondition(ql,"ext=='.{}'".format(ext))
         sc=self.sizeCondition()
