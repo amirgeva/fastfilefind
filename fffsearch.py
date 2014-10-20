@@ -80,7 +80,6 @@ class SearchDialog(QDialog):
 
         self.searchTerm.setFocus(Qt.OtherFocusReason)
         self.searchButton.clicked.connect(self.searchPressed)
-        #self.resultsList=self.dialog.findChild(QTableView,"resultsList")
 
         headers=['Name','Path','Size','Date']
         c=[]
@@ -100,6 +99,15 @@ class SearchDialog(QDialog):
         self.recentButton.clicked.connect(self.recentButtonPressed)
         self.dateType.currentIndexChanged.connect(self.dateTypeChanged)
         self.sizeType.currentIndexChanged.connect(self.sizeTypeChanged)
+        
+        self.raiseTimer=QTimer()
+        self.raiseTimer.timeout.connect(self.raiseWindow)
+        self.raiseTimer.start(200)
+        
+    def raiseWindow(self):
+        self.activateWindow()
+        self.raise_()
+        self.raiseTimer.stop()
 
     def itemClick(self,index):
         pass
@@ -252,6 +260,7 @@ def main():
     d.show()
     d.showNormal()
     d.activateWindow()
+    d.raise_()
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
