@@ -243,6 +243,8 @@ class SearchDialog(QDialog):
 
 
 def main():
+    root=os.path.dirname(os.path.abspath(__file__))
+    os.chdir(root)
     con=sq.connect('sindex.db')
     cur=con.cursor()
     app=QApplication(sys.argv)
