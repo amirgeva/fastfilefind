@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>548</width>
+    <height>549</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QLineEdit" name="searchTerm">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>16</y>
+     <width>209</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Search Term</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="SearchTermLabel">
+   <property name="geometry">
+    <rect>
+     <x>32</x>
+     <y>16</y>
+     <width>113</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Search Term</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="SearchTermLabel_2">
+   <property name="geometry">
+    <rect>
+     <x>32</x>
+     <y>48</y>
+     <width>113</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Extension:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="extensionName">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>54</y>
+     <width>209</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Search Term</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="sizeType">
+   <property name="geometry">
+    <rect>
+     <x>32</x>
+     <y>96</y>
+     <width>113</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <item>
+    <property name="text">
+     <string>Any Size</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Less Than</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>More Than</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLineEdit" name="sizeEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>96</y>
+     <width>129</width>
+     <height>33</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="smallButton">
+   <property name="geometry">
+    <rect>
+     <x>304</x>
+     <y>96</y>
+     <width>81</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Small</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="largeButton">
+   <property name="geometry">
+    <rect>
+     <x>396</x>
+     <y>96</y>
+     <width>81</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Large</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="SearchTermLabel_3">
+   <property name="geometry">
+    <rect>
+     <x>32</x>
+     <y>144</y>
+     <width>81</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Modified:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="dateType">
+   <property name="geometry">
+    <rect>
+     <x>128</x>
+     <y>144</y>
+     <width>113</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>Any Time</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Before</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>After</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLineEdit" name="dateEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>256</x>
+     <y>144</y>
+     <width>113</width>
+     <height>33</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="recentButton">
+   <property name="geometry">
+    <rect>
+     <x>384</x>
+     <y>144</y>
+     <width>93</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Recent</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="SearchTermLabel_4">
+   <property name="geometry">
+    <rect>
+     <x>32</x>
+     <y>192</y>
+     <width>145</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Base Directory:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="baseEdit">
+   <property name="geometry">
+    <rect>
+     <x>176</x>
+     <y>192</y>
+     <width>369</width>
+     <height>33</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTableView" name="resultsList">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>288</y>
+     <width>545</width>
+     <height>257</height>
+    </rect>
+   </property>
+   <property name="showGrid">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="searchButton">
+   <property name="geometry">
+    <rect>
+     <x>436</x>
+     <y>15</y>
+     <width>97</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Search</string>
+   </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="resultsEdit">
+   <property name="geometry">
+    <rect>
+     <x>208</x>
+     <y>240</y>
+     <width>129</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>32</x>
+     <y>240</y>
+     <width>177</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Number of Results:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="resetButton">
+   <property name="geometry">
+    <rect>
+     <x>352</x>
+     <y>240</y>
+     <width>97</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Reset</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
