@@ -29,3 +29,5 @@ The fffsearch.py opens a GUI for searching.  For fast access, setting up a keybo
 shortcut that starts this GUI is best.
 The fields are relatively self explanatory.
 Double clicking a result runs (opens) it.
+
+
