@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>548</width>
-    <height>491</height>
+    <height>549</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -212,9 +212,9 @@
   <widget class="QLineEdit" name="baseEdit">
    <property name="geometry">
     <rect>
-     <x>208</x>
+     <x>176</x>
      <y>192</y>
-     <width>337</width>
+     <width>369</width>
      <height>33</height>
     </rect>
    </property>
@@ -223,7 +223,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>232</y>
+     <y>288</y>
      <width>545</width>
      <height>257</height>
     </rect>
@@ -235,10 +235,10 @@
   <widget class="QPushButton" name="searchButton">
    <property name="geometry">
     <rect>
-     <x>440</x>
-     <y>20</y>
-     <width>93</width>
-     <height>28</height>
+     <x>436</x>
+     <y>15</y>
+     <width>97</width>
+     <height>33</height>
     </rect>
    </property>
    <property name="text">
@@ -246,6 +246,45 @@
    </property>
    <property name="default">
     <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="resultsEdit">
+   <property name="geometry">
+    <rect>
+     <x>208</x>
+     <y>240</y>
+     <width>129</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>32</x>
+     <y>240</y>
+     <width>177</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Number of Results:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="resetButton">
+   <property name="geometry">
+    <rect>
+     <x>352</x>
+     <y>240</y>
+     <width>97</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Reset</string>
    </property>
   </widget>
  </widget>
