@@ -87,6 +87,7 @@ class SearchDialog(QDialog):
 
         self.searchTerm.setFocus(Qt.OtherFocusReason)
         self.searchButton.clicked.connect(self.searchPressed)
+        self.resetButton.clicked.connect(self.resetPressed)
 
         headers=['Name','Path','Size','Date']
         c=[]
@@ -157,6 +158,19 @@ class SearchDialog(QDialog):
             self.resultsList.resize(self.size()-self.dsize)
         self.manageLastSize()
                 
+    def resetPressed(self):
+        self.sizeType.setCurrentIndex(0)
+        self.sizeEdit.setText('')
+        self.sizeEdit.setDisabled(True)
+        self.dateEdit.setText('')
+        self.dateEdit.setDisabled(True)
+        self.dateType.setCurrentIndex(0)
+        self.searchTerm.setText('')
+        self.extensionName.setText('')
+        self.baseEdit.setText('')
+        self.resultsEdit.setText('')
+        self.setResults([])
+        self.searchTerm.setFocus(Qt.OtherFocusReason)
 
     def sizeTypeChanged(self,index):
         self.sizeEdit.setEnabled(index>0)
@@ -254,6 +268,7 @@ class SearchDialog(QDialog):
             c.append(l)
         self.results=SearchResults(c,headers)
         self.resultsList.setModel(self.results)
+        self.resultsEdit.setText('{}'.format(len(rows)))
 
 
 
