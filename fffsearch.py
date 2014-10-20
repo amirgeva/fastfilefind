@@ -12,22 +12,12 @@
 import sqlite3 as sq
 import os
 import sys
-from PySide.QtCore import *
-from PySide.QtGui import *
-from PySide.QtUiTools import *
+from PyQt4 import QtCore, QtGui
 from datetime import datetime, timedelta, date
-from pyside_dynamic import loadUi
+import uis
 
 def dateFormat(t):
     return str(date.fromtimestamp(t))
-
-def loadUI():
-        loader = QUiLoader()
-        file = QFile("search.ui")
-        file.open(QFile.ReadOnly)
-        widget = loader.load(file, None)
-        file.close()
-        return widget
 
 def launchFile(path):
     if sys.platform == 'win32':
@@ -36,7 +26,7 @@ def launchFile(path):
         os.system('xdg-open '+path)
     
 
-class SearchResults(QAbstractTableModel):
+class SearchResults(QtCore.QAbstractTableModel):
     def __init__(self, contents, headers):
         super(SearchResults, self).__init__()
         self.contents = contents
@@ -51,7 +41,7 @@ class SearchResults(QAbstractTableModel):
         return len(self.contents[0])
 
     def headerData(self,section,orientation,role):
-        if role==Qt.DisplayRole and orientation==Qt.Horizontal:
+        if role==QtCore.Qt.DisplayRole and orientation==QtCore.Qt.Horizontal:
             return str(self.headers[section])
 
     def getCell(self,row,col):
@@ -59,7 +49,7 @@ class SearchResults(QAbstractTableModel):
         return str(row[col])
             
     def data(self, index, role):
-        if role == Qt.DisplayRole:
+        if role == QtCore.Qt.DisplayRole:
             row=self.contents[index.row()]
             col=index.column()
             if col==3:
@@ -68,7 +58,7 @@ class SearchResults(QAbstractTableModel):
 
     def sort(self,column,order):
         rev=True
-        if order==Qt.AscendingOrder:
+        if order==QtCore.Qt.AscendingOrder:
             rev=False
         s=sorted(self.contents,key=lambda row : row[column],reverse=rev)
         self.contents=s
@@ -76,16 +66,16 @@ class SearchResults(QAbstractTableModel):
         br=self.createIndex(self.rowCount(None),self.columnCount(None),None)
         self.dataChanged.emit(tl,br)
 
-class SearchDialog(QDialog):
+class SearchDialog(QtGui.QDialog):
     def __init__(self,dbcur,parent=None):
         super(SearchDialog,self).__init__(parent)
-        loadUi('search.ui',self)
+        uis.loadDialog('search',self)
         self.setWindowTitle('Fast File Find')
         self.cursor=dbcur
         self.dsize=None
         self.loadedLastSize=False
 
-        self.searchTerm.setFocus(Qt.OtherFocusReason)
+        self.searchTerm.setFocus(QtCore.Qt.OtherFocusReason)
         self.searchButton.clicked.connect(self.searchPressed)
         self.resetButton.clicked.connect(self.resetPressed)
 
@@ -108,7 +98,7 @@ class SearchDialog(QDialog):
         self.dateType.currentIndexChanged.connect(self.dateTypeChanged)
         self.sizeType.currentIndexChanged.connect(self.sizeTypeChanged)
         
-        self.raiseTimer=QTimer()
+        self.raiseTimer=QtCore.QTimer(self)
         self.raiseTimer.timeout.connect(self.raiseWindow)
         self.raiseTimer.start(200)
         
@@ -116,6 +106,7 @@ class SearchDialog(QDialog):
         self.activateWindow()
         self.raise_()
         self.raiseTimer.stop()
+        self.raiseTimer=None
 
     def itemClick(self,index):
         pass
@@ -129,13 +120,13 @@ class SearchDialog(QDialog):
         
         
     def manageLastSize(self):
-        s=QSettings("MLGSoft")
+        s=QtCore.QSettings("MLGSoft")
         if not self.loadedLastSize:
             self.loadedLastSize=True
             try:
-                w=int(s.value('winWidth',defaultValue=640))
-                h=int(s.value('winHeight',defaultValue=480))
-                self.resize(QSize(w,h))
+                w=int(s.value('winWidth',defaultValue=640).toString())
+                h=int(s.value('winHeight',defaultValue=480).toString())
+                self.resize(QtCore.QSize(w,h))
                 self.resizeEvent(None)
             except IOError:
                 pass
@@ -170,12 +161,12 @@ class SearchDialog(QDialog):
         self.baseEdit.setText('')
         self.resultsEdit.setText('')
         self.setResults([])
-        self.searchTerm.setFocus(Qt.OtherFocusReason)
+        self.searchTerm.setFocus(QtCore.Qt.OtherFocusReason)
 
     def sizeTypeChanged(self,index):
         self.sizeEdit.setEnabled(index>0)
         if (index>0):
-            self.sizeEdit.setFocus(Qt.OtherFocusReason)
+            self.sizeEdit.setFocus(QtCore.Qt.OtherFocusReason)
 
     def smallButtonPressed(self):
         self.sizeType.setCurrentIndex(1)
@@ -246,7 +237,7 @@ class SearchDialog(QDialog):
             cond='>'
             if self.dateType.currentIndex()==1:
                 cond='<'
-            d=datetime.strptime(self.dateEdit.text(),"%Y-%m-%d")
+            d=datetime.strptime(str(self.dateEdit.text()),"%Y-%m-%d")
             epoch = datetime.utcfromtimestamp(0)
             delta = d - epoch
             s=delta.total_seconds()
@@ -279,13 +270,13 @@ def main():
     os.chdir(root)
     con=sq.connect('sindex.db')
     cur=con.cursor()
-    app=QApplication(sys.argv)
+    app=QtGui.QApplication(sys.argv)
     d=SearchDialog(cur)
     d.show()
     d.showNormal()
     d.activateWindow()
     d.raise_()
-    sys.exit(app.exec_())
+    app.exec_()
 
 if __name__ == '__main__':
     main()
