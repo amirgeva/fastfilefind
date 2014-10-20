@@ -29,6 +29,13 @@ def loadUI():
         file.close()
         return widget
 
+def launchFile(path):
+    if sys.platform == 'win32':
+        os.system("start "+path)
+    if sys.platform.startswith('linux'):
+        os.system('xdg-open '+path)
+    
+
 class SearchResults(QAbstractTableModel):
     def __init__(self, contents, headers):
         super(SearchResults, self).__init__()
@@ -117,7 +124,8 @@ class SearchDialog(QDialog):
         filename=self.results.getCell(row,0)
         dir=self.results.getCell(row,1)
         path=os.path.join(dir,filename)
-        os.system("start "+path)
+        launchFile(path)
+        
         
     def manageLastSize(self):
         s=QSettings("MLGSoft")
