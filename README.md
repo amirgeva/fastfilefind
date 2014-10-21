@@ -4,9 +4,9 @@ fastfilefind
 Disk indexing and search utility
 --------------------------------
 
-Requirements:  
+Requirements:
 * python 2.7
-* PySide
+* PyQt4  (python-qt4)
 * On Windows:  python module  win32api
                
 
