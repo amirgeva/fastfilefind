@@ -61,9 +61,9 @@ def writeFiles(cur,files):
     for f in files:
         cur.execute('INSERT INTO t_files (name,dir,ext,size,time) VALUES ("{}",{},"{}",{},{})'.format(*f))
 
-def writeDB(dirs,files):
+def writeDB(dirs,files,dbDir):
     try:
-        con=sq.connect('sindex.db')
+        con=sq.connect(os.path.join(dbDir,'sindex.db'))
         cur=con.cursor()
         createTables(cur)
         writeDirs(cur,dirs)
@@ -100,7 +100,8 @@ def main():
     start=time.time()
     drives=getDrives()
     excludes=[]
-    for line in open("fffbuild.cfg"):
+    dbDir=os.path.dirname(os.path.abspath(__file__))
+    for line in open(os.path.join(dbDir,"fffbuild.cfg")):
         if (line.startswith("exclude=")):
             dir=line[8:]
             excludes.append(dir.strip())
@@ -114,7 +115,7 @@ def main():
     end=time.time()
     print "Scan took {} second".format(int(end-start))
     start=end
-    writeDB(dirs,files)
+    writeDB(dirs,files,dbDir)
     end=time.time()
     print "Database write took {} seconds".format(int(end-start))
 
