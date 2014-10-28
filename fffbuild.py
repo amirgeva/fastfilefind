@@ -79,8 +79,6 @@ def scan(excludes,dirs,files,base):
             dn for dn in dirnames
             if os.path.join(dirpath, dn) not in excludes ]
         idx=len(dirs)
-        #if idx>100:
-        #    return len(files)
         if ((idx&255)==0):
             print "{} {}".format(len(files),dirpath)
         dirs.append(dirpath)
