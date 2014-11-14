@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
-        Dialog.resize(548, 549)
+        Dialog.resize(595, 549)
         Dialog.searchTerm = QtGui.QLineEdit(Dialog)
         Dialog.searchTerm.setGeometry(QtCore.QRect(160, 16, 209, 33))
         Dialog.searchTerm.setObjectName(_fromUtf8("searchTerm"))
@@ -78,11 +78,11 @@ class Ui_Dialog(object):
         Dialog.baseEdit.setGeometry(QtCore.QRect(176, 192, 369, 33))
         Dialog.baseEdit.setObjectName(_fromUtf8("baseEdit"))
         Dialog.resultsList = QtGui.QTableView(Dialog)
-        Dialog.resultsList.setGeometry(QtCore.QRect(0, 288, 545, 257))
+        Dialog.resultsList.setGeometry(QtCore.QRect(0, 288, 593, 257))
         Dialog.resultsList.setShowGrid(False)
         Dialog.resultsList.setObjectName(_fromUtf8("resultsList"))
         Dialog.searchButton = QtGui.QPushButton(Dialog)
-        Dialog.searchButton.setGeometry(QtCore.QRect(436, 15, 97, 33))
+        Dialog.searchButton.setGeometry(QtCore.QRect(496, 16, 97, 33))
         Dialog.searchButton.setDefault(True)
         Dialog.searchButton.setObjectName(_fromUtf8("searchButton"))
         Dialog.resultsEdit = QtGui.QLineEdit(Dialog)
@@ -95,6 +95,9 @@ class Ui_Dialog(object):
         Dialog.resetButton = QtGui.QPushButton(Dialog)
         Dialog.resetButton.setGeometry(QtCore.QRect(352, 240, 97, 32))
         Dialog.resetButton.setObjectName(_fromUtf8("resetButton"))
+        Dialog.exactCB = QtGui.QCheckBox(Dialog)
+        Dialog.exactCB.setGeometry(QtCore.QRect(384, 16, 97, 27))
+        Dialog.exactCB.setObjectName(_fromUtf8("exactCB"))
 
         self.retranslateUi(Dialog)
         Dialog.sizeType.setCurrentIndex(0)
@@ -120,4 +123,5 @@ class Ui_Dialog(object):
         Dialog.searchButton.setText(_translate("Dialog", "Search", None))
         Dialog.label.setText(_translate("Dialog", "Number of Results:", None))
         Dialog.resetButton.setText(_translate("Dialog", "Reset", None))
+        Dialog.exactCB.setText(_translate("Dialog", "Exact", None))
 
