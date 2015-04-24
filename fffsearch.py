@@ -274,6 +274,7 @@ def main():
     root=os.path.dirname(os.path.abspath(__file__))
     os.chdir(root)
     con=sq.connect('sindex.db')
+    con.text_factory = str
     cur=con.cursor()
     app=QtGui.QApplication(sys.argv)
     d=SearchDialog(cur)
