@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 from subprocess import call
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 import re
 import inspect
 import importlib
