@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #-------------------------------------------------------------------------------
 # Name:        fffsearch
 # Purpose:
@@ -90,7 +90,7 @@ class SearchDialog(QtGui.QDialog):
         if sm is not None:
             sm.selectionChanged.connect(self.selChanged)
         else:
-            print "No selection model"
+            print("No selection model")
 
         self.smallButton.clicked.connect(self.smallButtonPressed)
         self.largeButton.clicked.connect(self.largeButtonPressed)
