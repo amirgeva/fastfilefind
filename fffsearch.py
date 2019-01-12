@@ -12,7 +12,7 @@
 import sqlite3 as sq
 import os
 import sys
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime, timedelta, date
 import uis
 
@@ -66,7 +66,7 @@ class SearchResults(QtCore.QAbstractTableModel):
         br=self.createIndex(self.rowCount(None),self.columnCount(None),None)
         self.dataChanged.emit(tl,br)
 
-class SearchDialog(QtGui.QDialog):
+class SearchDialog(QtWidgets.QDialog):
     def __init__(self,dbcur,parent=None):
         super(SearchDialog,self).__init__(parent)
         uis.loadDialog('search',self)
@@ -124,8 +124,8 @@ class SearchDialog(QtGui.QDialog):
         if not self.loadedLastSize:
             self.loadedLastSize=True
             try:
-                w=int(s.value('winWidth',defaultValue=640).toString())
-                h=int(s.value('winHeight',defaultValue=480).toString())
+                w=int(s.value('winWidth',defaultValue=640))
+                h=int(s.value('winHeight',defaultValue=480))
                 self.resize(QtCore.QSize(w,h))
                 self.resizeEvent(None)
             except IOError:
@@ -140,7 +140,6 @@ class SearchDialog(QtGui.QDialog):
 
     def selChanged(self):
         pass
-        #print "Sel changed"
 
     def resizeEvent(self,event):
         if self.dsize is None:
@@ -250,7 +249,6 @@ class SearchDialog(QtGui.QDialog):
         ql.append(');')
 
         q=''.join(ql)
-        #print q
 
         self.cursor.execute(q)
         self.setResults(self.cursor.fetchall())
@@ -276,7 +274,7 @@ def main():
     con=sq.connect('sindex.db')
     con.text_factory = str
     cur=con.cursor()
-    app=QtGui.QApplication(sys.argv)
+    app=QtWidgets.QApplication(sys.argv)
     d=SearchDialog(cur)
     d.show()
     d.showNormal()

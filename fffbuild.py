@@ -33,14 +33,14 @@ def getDrives():
         return getWindowsDrives()
     if sys.platform.startswith('linux'):
         return getLinuxDrive()
-    print "Unknown platform '{}'".format(sys.platform)
+    print("Unknown platform '{}'".format(sys.platform))
     return []
 
 def createTables(cur):
     try:
         cur.execute('CREATE TABLE t_dirs(id INTEGER PRIMARY KEY, path TEXT)')
         cur.execute('CREATE INDEX dirs_path_idx ON t_dirs(path);')
-    except sq.Error, e:
+    except sq.Error as e:
         cur.execute('DELETE from t_dirs')
     try:
         cur.execute('CREATE TABLE t_files(file_id INTEGER PRIMARY KEY, name TEXT, dir INTEGER, ext TEXT, size INT, time INT)')
@@ -48,7 +48,7 @@ def createTables(cur):
         cur.execute('CREATE INDEX files_ext_idx ON t_files(ext);')
         cur.execute('CREATE INDEX files_size_idx ON t_files(size);')
         cur.execute('CREATE INDEX files_time_idx ON t_files(time);')
-    except sq.Error, e:
+    except sq.Error as e:
         cur.execute('DELETE from t_files')
 
 def writeDirs(cur,dirs):
@@ -69,8 +69,8 @@ def writeDB(dirs,files,dbDir):
         writeDirs(cur,dirs)
         writeFiles(cur,files)
         con.commit()
-    except sq.Error, e:
-        print "Error : {}".format(e.args[0])
+    except sq.Error as e:
+        print("Error : {}".format(e.args[0]))
 
 def scan(excludes,dirs,files,base):
     total=0
@@ -80,7 +80,7 @@ def scan(excludes,dirs,files,base):
             if os.path.join(dirpath, dn) not in excludes ]
         idx=len(dirs)
         if ((idx&255)==0):
-            print "{} {}".format(len(files),dirpath)
+            print("{} {}".format(len(files),dirpath))
         dirs.append(dirpath)
         for f in filelist:
             fullpath=os.path.join(dirpath,f)
@@ -90,7 +90,7 @@ def scan(excludes,dirs,files,base):
             try:
                 filesize=os.path.getsize(fullpath);
                 filetime=os.path.getmtime(fullpath)
-            except Exception,e:
+            except Exception as e:
                 pass
             files.append([f,idx,ext,filesize,filetime])
 
@@ -103,19 +103,19 @@ def main():
         if (line.startswith("exclude=")):
             dir=line[8:]
             excludes.append(dir.strip())
-    print "Excluding:"
-    print excludes
+    print("Excluding:")
+    print(excludes)
     dirs=[]
     files=[]
     for d in drives:
         if d not in excludes:
             scan(excludes,dirs,files,d)
     end=time.time()
-    print "Scan took {} second".format(int(end-start))
+    print("Scan took {} second".format(int(end-start)))
     start=end
     writeDB(dirs,files,dbDir)
     end=time.time()
-    print "Database write took {} seconds".format(int(end-start))
+    print("Database write took {} seconds".format(int(end-start)))
 
 if __name__ == '__main__':
     main()
