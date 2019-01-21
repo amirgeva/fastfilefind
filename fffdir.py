@@ -9,8 +9,7 @@ def main():
         return
     args=sys.argv[1:]
     root=os.path.dirname(os.path.abspath(__file__))
-    os.chdir(root)
-    con=sq.connect('sindex.db')
+    con=sq.connect(os.path.join(root,'sindex.db'))
     con.text_factory = str
     cur=con.cursor()
     ql = ["SELECT path FROM t_dirs WHERE ("]
@@ -22,8 +21,11 @@ def main():
     cur.execute(''.join(ql))
     res=cur.fetchall()
     i=0
-    dir,=res[0]
-    print(dir)
+    if len(res)==0:
+        print(os.getcwd())
+    else:
+        dir,=res[0]
+        print(dir)
 
 if __name__ == '__main__':
     main()
