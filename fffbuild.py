@@ -14,6 +14,7 @@ import os
 import sys
 import time
 
+
 def getWindowsDrives():
     import win32api
     import win32file
@@ -25,8 +26,10 @@ def getWindowsDrives():
             phys.append(d)
     return phys
     
+
 def getLinuxDrive():
     return ['/']
+
 
 def getDrives():
     if sys.platform == 'win32':
@@ -36,6 +39,7 @@ def getDrives():
     print("Unknown platform '{}'".format(sys.platform))
     return []
 
+
 def createTables(cur):
     try:
         cur.execute('CREATE TABLE t_dirs(id INTEGER PRIMARY KEY, path TEXT)')
@@ -43,7 +47,8 @@ def createTables(cur):
     except sq.Error as e:
         cur.execute('DELETE from t_dirs')
     try:
-        cur.execute('CREATE TABLE t_files(file_id INTEGER PRIMARY KEY, name TEXT, dir INTEGER, ext TEXT, size INT, time INT)')
+        cur.execute(
+            'CREATE TABLE t_files(file_id INTEGER PRIMARY KEY, name TEXT, dir INTEGER, ext TEXT, size INT, time INT)')
         cur.execute('CREATE INDEX files_name_idx ON t_files(name);')
         cur.execute('CREATE INDEX files_ext_idx ON t_files(ext);')
         cur.execute('CREATE INDEX files_size_idx ON t_files(size);')
@@ -51,15 +56,24 @@ def createTables(cur):
     except sq.Error as e:
         cur.execute('DELETE from t_files')
 
+
 def writeDirs(cur,dirs):
     id=0;
     for d in dirs:
+        try:
         cur.execute('INSERT INTO t_dirs (id,path) VALUES ("{}","{}")'.format(id,d))
         id=id+1
+        except sq.Error as e:
+            print("Error : {}".format(e.args[0]))
+
 
 def writeFiles(cur,files):
     for f in files:
+        try:
         cur.execute('INSERT INTO t_files (name,dir,ext,size,time) VALUES ("{}",{},"{}",{},{})'.format(*f))
+        except sq.Error as e:
+            print("Error : {}".format(e.args[0]))
+
 
 def writeDB(dirs,files,dbDir):
     try:
@@ -71,6 +85,7 @@ def writeDB(dirs,files,dbDir):
         con.commit()
     except sq.Error as e:
         print("Error : {}".format(e.args[0]))
+
 
 def scan(excludes,dirs,files,base):
     total=0
@@ -94,6 +109,7 @@ def scan(excludes,dirs,files,base):
                 pass
             files.append([f,idx,ext,filesize,filetime])
 
+
 def main():
     start=time.time()
     drives=getDrives()
@@ -116,6 +132,7 @@ def main():
     writeDB(dirs,files,dbDir)
     end=time.time()
     print("Database write took {} seconds".format(int(end-start)))
+
 
 if __name__ == '__main__':
     main()
