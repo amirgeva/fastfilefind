@@ -54,24 +54,24 @@ def find_best_match(dirs, args):
 
 
 def main():
-    if len(sys.argv) < 2:
+    if len(sys.argv)<2:
         print("Usage: fffdir.py <term> [term] ...")
         return
-    args = sys.argv[1:]
-    root = os.path.dirname(os.path.abspath(__file__))
-    con = sq.connect(os.path.join(root, 'sindex.db'))
+    args=sys.argv[1:]
+    root=os.path.dirname(os.path.abspath(__file__))
+    con=sq.connect(os.path.join(root,'sindex.db'))
     con.text_factory = str
-    cur = con.cursor()
+    cur=con.cursor()
     ql = ["SELECT path FROM t_dirs WHERE ("]
-    conds = []
+    conds=[]
     for term in args:
         conds.append("path LIKE '%{}%'".format(term))
     ql.append(' AND '.join(conds))
     ql.append(')')
     cur.execute(''.join(ql))
-    res = cur.fetchall()
-    i = 0
-    if len(res) == 0:
+    res=cur.fetchall()
+    i=0
+    if len(res)==0:
         print(os.getcwd())
     else:
         res = [d[0] for d in res]

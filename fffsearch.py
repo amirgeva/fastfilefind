@@ -98,13 +98,13 @@ class SearchDialog(QtWidgets.QDialog):
         self.dateType.currentIndexChanged.connect(self.dateTypeChanged)
         self.sizeType.currentIndexChanged.connect(self.sizeTypeChanged)
         
-        self.raiseTimer=QtCore.QTimer(self)
-        self.raiseTimer.timeout.connect(self.raiseWindow)
-        self.raiseTimer.start(200)
+        #self.raiseTimer=QtCore.QTimer(self)
+        #self.raiseTimer.timeout.connect(self.raiseWindow)
+        #self.raiseTimer.start(200)
         
     def raiseWindow(self):
-        self.activateWindow()
         self.raise_()
+        self.activateWindow()
         self.raiseTimer.stop()
         self.raiseTimer=None
 
@@ -278,8 +278,8 @@ def main():
     d=SearchDialog(cur)
     d.show()
     d.showNormal()
-    d.activateWindow()
     d.raise_()
+    d.activateWindow()
     app.exec_()
 
 if __name__ == '__main__':
