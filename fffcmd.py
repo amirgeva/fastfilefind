@@ -86,6 +86,10 @@ def search(term='', *, ext='', exact=False, base='',
     :param after: Show files modified after date (YYYY-MM-DD)
     :param no_archives: Skip archive search
     """
+    if not term and not ext and not base and size_less is None and size_greater is None and not before and not after:
+        print("No search filters specified. Run with --help for usage.")
+        return
+
     root = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(root, 'sindex.db')
     if not os.path.exists(db_path):
