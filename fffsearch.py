@@ -12,7 +12,7 @@
 import sqlite3 as sq
 import os
 import sys
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtGui, QtWidgets
 from datetime import datetime, timedelta, date
 import uis
 
@@ -41,7 +41,7 @@ class SearchResults(QtCore.QAbstractTableModel):
         return len(self.contents[0])
 
     def headerData(self,section,orientation,role):
-        if role==QtCore.Qt.DisplayRole and orientation==QtCore.Qt.Horizontal:
+        if role==QtCore.Qt.ItemDataRole.DisplayRole and orientation==QtCore.Qt.Orientation.Horizontal:
             return str(self.headers[section])
 
     def getCell(self,row,col):
@@ -49,7 +49,7 @@ class SearchResults(QtCore.QAbstractTableModel):
         return str(row[col])
             
     def data(self, index, role):
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole:
             row=self.contents[index.row()]
             col=index.column()
             if col==3:
@@ -58,7 +58,7 @@ class SearchResults(QtCore.QAbstractTableModel):
 
     def sort(self,column,order):
         rev=True
-        if order==QtCore.Qt.AscendingOrder:
+        if order==QtCore.Qt.SortOrder.AscendingOrder:
             rev=False
         s=sorted(self.contents,key=lambda row : row[column],reverse=rev)
         self.contents=s
@@ -75,11 +75,11 @@ class SearchDialog(QtWidgets.QDialog):
         self.dsize=None
         self.loadedLastSize=False
 
-        self.searchTerm.setFocus(QtCore.Qt.OtherFocusReason)
+        self.searchTerm.setFocus(QtCore.Qt.FocusReason.OtherFocusReason)
         self.searchButton.clicked.connect(self.searchPressed)
         self.resetButton.clicked.connect(self.resetPressed)
 
-        headers=['Name','Path','Size','Date']
+        headers=['Name','Path','Size','Date','Archive']
         c=[]
         self.results=SearchResults(c,headers)
         self.resultsList.setModel(self.results)
@@ -113,10 +113,14 @@ class SearchDialog(QtWidgets.QDialog):
         
     def itemDoubleClick(self,index):
         row=index.row()
-        filename=self.results.getCell(row,0)
-        dir=self.results.getCell(row,1)
-        path=os.path.join(dir,filename)
-        launchFile(path)
+        archive=self.results.getCell(row,4)
+        if len(archive)>0:
+            launchFile(archive)
+        else:
+            filename=self.results.getCell(row,0)
+            dir=self.results.getCell(row,1)
+            path=os.path.join(dir,filename)
+            launchFile(path)
         
         
     def manageLastSize(self):
@@ -149,7 +153,7 @@ class SearchDialog(QtWidgets.QDialog):
         self.manageLastSize()
                 
     def resetPressed(self):
-        self.exactCB.setCheckState(QtCore.Qt.Unchecked)
+        self.exactCB.setCheckState(QtCore.Qt.CheckState.Unchecked)
         self.sizeType.setCurrentIndex(0)
         self.sizeEdit.setText('')
         self.sizeEdit.setDisabled(True)
@@ -160,13 +164,13 @@ class SearchDialog(QtWidgets.QDialog):
         self.extensionName.setText('')
         self.baseEdit.setText('')
         self.resultsEdit.setText('')
-        self.setResults([])
-        self.searchTerm.setFocus(QtCore.Qt.OtherFocusReason)
+        self.setResults([], [])
+        self.searchTerm.setFocus(QtCore.Qt.FocusReason.OtherFocusReason)
 
     def sizeTypeChanged(self,index):
         self.sizeEdit.setEnabled(index>0)
         if (index>0):
-            self.sizeEdit.setFocus(QtCore.Qt.OtherFocusReason)
+            self.sizeEdit.setFocus(QtCore.Qt.FocusReason.OtherFocusReason)
 
     def smallButtonPressed(self):
         self.sizeType.setCurrentIndex(1)
@@ -212,20 +216,10 @@ class SearchDialog(QtWidgets.QDialog):
         ql.append(cond)
         ql.append(")")
 
-    def searchPressed(self):
-        base=self.baseEdit.text()
-        mindir=0
-        maxdir=99999999
-        if len(base)>0:
-            q="select min(id),max(id) from t_dirs where path like '{}%';".format(base)
-            self.cursor.execute(q)
-            rows=self.cursor.fetchall()
-            mindir,maxdir=rows[0]
-        ql=["SELECT name, dir, ext, size, time, path FROM t_files INNER JOIN t_dirs ON t_files.dir==t_dirs.id WHERE ("]
-        ql.append('(dir>{}) AND (dir<{})'.format(mindir,maxdir))
+    def buildConditions(self, ql):
         ext=self.extensionName.text()
         term=self.searchTerm.text()
-        if self.exactCB.checkState()==QtCore.Qt.Checked:
+        if self.exactCB.checkState()==QtCore.Qt.CheckState.Checked:
             self.appendCondition(ql,"name = '{}'".format(term))
         else:
             terms=term.split(' ')
@@ -246,24 +240,51 @@ class SearchDialog(QtWidgets.QDialog):
             delta = d - epoch
             s=delta.total_seconds()
             self.appendCondition(ql,"time {} {}".format(cond,s))
+
+    def searchFiles(self):
+        base=self.baseEdit.text()
+        ql=["SELECT name, dir, ext, size, time, path FROM t_files INNER JOIN t_dirs ON t_files.dir==t_dirs.id WHERE (1=1"]
+        if len(base)>0:
+            ql.append(" AND (path LIKE '{}%')".format(base))
+        self.buildConditions(ql)
         ql.append(');')
-
         q=''.join(ql)
-
         self.cursor.execute(q)
-        self.setResults(self.cursor.fetchall())
+        return self.cursor.fetchall()
+
+    def searchArchiveFiles(self):
+        base=self.baseEdit.text()
+        ql=["SELECT af.name, af.dir, af.ext, af.size, af.time, ad.path, a.path"
+            " FROM t_archive_files af"
+            " INNER JOIN t_archive_dirs ad ON af.dir==ad.id"
+            " INNER JOIN t_archives a ON ad.archive==a.id"
+            " WHERE (1=1"]
+        if len(base)>0:
+            ql.append(" AND (a.path LIKE '{}%')".format(base))
+        self.buildConditions(ql)
+        ql.append(');')
+        q=''.join(ql)
+        self.cursor.execute(q)
+        return self.cursor.fetchall()
+
+    def searchPressed(self):
+        file_rows = self.searchFiles()
+        archive_rows = self.searchArchiveFiles()
+        self.setResults(file_rows, archive_rows)
         self.resultsList.resizeColumnsToContents()
 
-    def setResults(self,rows):
-        headers=['Name','Path','Size','Date']
+    def setResults(self, file_rows, archive_rows):
+        headers=['Name','Path','Size','Date','Archive']
         c=[]
-        for r in rows:
+        for r in file_rows:
             (name, dir, ext, size, time, path)=r
-            l=[name,path,size,time]
-            c.append(l)
+            c.append([name,path,size,time,''])
+        for r in archive_rows:
+            (name, dir, ext, size, time, arc_dir, arc_path)=r
+            c.append([name,arc_dir,size,time,arc_path])
         self.results=SearchResults(c,headers)
         self.resultsList.setModel(self.results)
-        self.resultsEdit.setText('{}'.format(len(rows)))
+        self.resultsEdit.setText('{}'.format(len(c)))
 
 
 
@@ -280,7 +301,7 @@ def main():
     d.showNormal()
     d.raise_()
     d.activateWindow()
-    app.exec_()
+    app.exec()
 
 if __name__ == '__main__':
     main()

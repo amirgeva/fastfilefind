@@ -7,7 +7,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtWidgets, QtWidgets
+from PyQt6 import QtCore, QtWidgets, QtWidgets
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
