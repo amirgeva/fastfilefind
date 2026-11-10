@@ -161,8 +161,8 @@ def scan_zip(fullpath, archives, archive_dirs, archive_files):
                 dt = info.date_time
                 file_time = int(time.mktime(dt + (0, 0, -1)))
                 archive_files.append([basename, dir_idx, ext, info.file_size, file_time])
-    except (zipfile.BadZipFile, OSError):
-        pass
+    except Exception as e:  # corrupt files, unsupported features...
+        print("[zip] skipped {}: {}".format(fullpath, type(e).__name__))
 
 
 def scan_7z(fullpath, archives, archive_dirs, archive_files):
@@ -185,8 +185,8 @@ def scan_7z(fullpath, archives, archive_dirs, archive_files):
                 _, ext = os.path.splitext(basename)
                 file_time = int(info.creationtime.timestamp()) if info.creationtime else 0
                 archive_files.append([basename, dir_idx, ext, info.uncompressed, file_time])
-    except (py7zr.Bad7zFile, OSError):
-        pass
+    except Exception as e:  # encrypted headers, unsupported methods, corrupt files...
+        print("[7z] skipped {}: {}".format(fullpath, type(e).__name__))
 
 
 def scan(excludes, dirs, files, archives, archive_dirs, archive_files, base):
